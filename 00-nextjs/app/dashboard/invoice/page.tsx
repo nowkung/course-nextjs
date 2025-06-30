@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/Button';
+import Link from 'next/link';
 
 // Mock data for demonstration
 const invoices = [
@@ -58,9 +59,11 @@ export default function InvoicePage() {
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <Button variant="outline" size="sm" className="mr-2">
-                    View
-                  </Button>
+                  <Link href={`/dashboard/invoice/${invoice.id}`}>
+                    <Button variant="outline" size="sm" className="mr-2">
+                      View
+                    </Button>
+                  </Link>
                   <Button variant="outline" size="sm">
                     Edit
                   </Button>

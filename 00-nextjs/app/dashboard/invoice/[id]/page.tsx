@@ -7,11 +7,11 @@ import Link from 'next/link';
 // Mock invoice data - in a real app, this would come from an API
 const getInvoice = (id: string) => {
   const invoices = [
-    { 
-      id: 'INV-001', 
-      customer: 'Acme Inc.', 
-      amount: 1200, 
-      status: 'paid', 
+    {
+      id: 'INV-001',
+      customer: 'Acme Inc.',
+      amount: 1200,
+      status: 'paid',
       date: '2023-05-15',
       dueDate: '2023-06-15',
       items: [
@@ -19,22 +19,22 @@ const getInvoice = (id: string) => {
         { description: 'Hosting (1 year)', quantity: 1, unitPrice: 200, total: 200 },
       ]
     },
-    { 
-      id: 'INV-002', 
-      customer: 'Globex Corp', 
-      amount: 850, 
-      status: 'pending', 
+    {
+      id: 'INV-002',
+      customer: 'Globex Corp',
+      amount: 850,
+      status: 'pending',
       date: '2023-05-18',
       dueDate: '2023-06-18',
       items: [
         { description: 'Consulting', quantity: 10, unitPrice: 85, total: 850 },
       ]
     },
-    { 
-      id: 'INV-003', 
-      customer: 'Soylent Corp', 
-      amount: 3500, 
-      status: 'overdue', 
+    {
+      id: 'INV-003',
+      customer: 'Soylent Corp',
+      amount: 3500,
+      status: 'overdue',
       date: '2023-05-10',
       dueDate: '2023-06-10',
       items: [
@@ -71,8 +71,21 @@ export default function ViewInvoicePage() {
 
   return (
     <div className="bg-white rounded-lg shadow overflow-hidden">
+      {/* Back button */}
+      <div className="px-6 pt-4">
+        <button
+          onClick={() => router.back()}
+          className="text-blue-600 hover:text-blue-800 text-sm font-medium inline-flex items-center"
+        >
+          <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          Back to Invoices
+        </button>
+      </div>
+
       {/* Header */}
-      <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+      <div className="px-6 pb-4 pt-2 border-b border-gray-200 flex justify-between items-center">
         <div>
           <h2 className="text-xl font-semibold">Invoice #{invoice.id}</h2>
           <div className="flex items-center mt-1">
@@ -110,13 +123,13 @@ export default function ViewInvoicePage() {
             <div className="grid grid-cols-2 gap-x-4">
               <div className="text-sm text-gray-500">Invoice #</div>
               <div className="text-sm font-medium">{invoice.id}</div>
-              
+
               <div className="text-sm text-gray-500">Date</div>
               <div className="text-sm">{new Date(invoice.date).toLocaleDateString()}</div>
-              
+
               <div className="text-sm text-gray-500">Due Date</div>
               <div className="text-sm">{new Date(invoice.dueDate).toLocaleDateString()}</div>
-              
+
               <div className="text-sm text-gray-500">Amount Due</div>
               <div className="text-lg font-bold">${invoice.amount.toLocaleString()}</div>
             </div>

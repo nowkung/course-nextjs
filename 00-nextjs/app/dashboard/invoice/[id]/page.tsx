@@ -1,73 +1,85 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
-import Link from 'next/link';
+import { getInvoice } from '@/services/invoiceService';
+import { Invoice } from '@/types/invoice';
 
-// Mock invoice data - in a real app, this would come from an API
-const getInvoice = (id: string) => {
-  const invoices = [
-    {
-      id: 'INV-001',
-      customer: 'Acme Inc.',
-      amount: 1200,
-      status: 'paid',
-      date: '2023-05-15',
-      dueDate: '2023-06-15',
-      items: [
-        { description: 'Web Design Services', quantity: 1, unitPrice: 1000, total: 1000 },
-        { description: 'Hosting (1 year)', quantity: 1, unitPrice: 200, total: 200 },
-      ]
-    },
-    {
-      id: 'INV-002',
-      customer: 'Globex Corp',
-      amount: 850,
-      status: 'pending',
-      date: '2023-05-18',
-      dueDate: '2023-06-18',
-      items: [
-        { description: 'Consulting', quantity: 10, unitPrice: 85, total: 850 },
-      ]
-    },
-    {
-      id: 'INV-003',
-      customer: 'Soylent Corp',
-      amount: 3500,
-      status: 'overdue',
-      date: '2023-05-10',
-      dueDate: '2023-06-10',
-      items: [
-        { description: 'Software License', quantity: 1, unitPrice: 2500, total: 2500 },
-        { description: 'Support Package', quantity: 1, unitPrice: 1000, total: 1000 },
-      ]
-    },
-  ];
-
-  return invoices.find(invoice => invoice.id === id);
-};
-
-export default function ViewInvoicePage() {
-  const params = useParams();
+export default function InvoiceDetailPage() {
+  const { id } = useParams();
   const router = useRouter();
-  const invoice = getInvoice(params.id as string);
+  const [invoice, setInvoice] = useState<Invoice | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  if (!invoice) {
+  useEffect(() => {
+    const fetchInvoice = async () => {
+      try {
+        setLoading(true);
+        const data = await getInvoice(id as string);
+        if (data) {
+          setInvoice(data);
+        } else {
+          setError('Invoice not found');
+        }
+      } catch (err) {
+        console.error('Failed to fetch invoice:', err);
+        setError('Failed to load invoice. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchInvoice();
+    }
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
+
+  if (error) {
     return (
       <div className="bg-white rounded-lg shadow p-6 text-center">
-        <h2 className="text-xl font-semibold mb-4">Invoice not found</h2>
-        <Button onClick={() => router.push('/dashboard/invoice')}>
+        <h2 className="text-xl font-semibold mb-4 text-red-600">Error</h2>
+        <p className="text-gray-600 mb-6">{error}</p>
+        <Button
+          variant="outline"
+          onClick={() => router.push('/dashboard/invoice')}
+        >
           Back to Invoices
         </Button>
       </div>
     );
   }
 
-  const statusColors = {
+  if (!invoice) {
+    return (
+      <div className="bg-white rounded-lg shadow p-6 text-center">
+        <h2 className="text-xl font-semibold mb-4">Invoice Not Found</h2>
+        <p className="text-gray-600 mb-6">The requested invoice could not be found.</p>
+        <Button
+          variant="outline"
+          onClick={() => router.push('/dashboard/invoice')}
+        >
+          Back to Invoices
+        </Button>
+      </div>
+    );
+  }
+
+  const statusColor = {
     paid: 'bg-green-100 text-green-800',
     pending: 'bg-yellow-100 text-yellow-800',
     overdue: 'bg-red-100 text-red-800',
-  };
+    draft: 'bg-gray-100 text-gray-800',
+  }[invoice.status] || 'bg-gray-100 text-gray-800';
 
   return (
     <div className="bg-white rounded-lg shadow overflow-hidden">
@@ -87,22 +99,20 @@ export default function ViewInvoicePage() {
       {/* Header */}
       <div className="px-6 pb-4 pt-2 border-b border-gray-200 flex justify-between items-center">
         <div>
-          <h2 className="text-xl font-semibold">Invoice #{invoice.id}</h2>
-          <div className="flex items-center mt-1">
-            <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusColors[invoice.status as keyof typeof statusColors]}`}>
-              {invoice.status.charAt(0).toUpperCase() + invoice.status.slice(1)}
+          <h1 className="text-2xl font-bold text-gray-900">Invoice #{invoice.id}</h1>
+          <div className="mt-1">
+            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusColor}`}>
+              {invoice.status?.charAt(0).toUpperCase() + invoice.status?.slice(1)}
             </span>
           </div>
         </div>
         <div className="space-x-2">
-          <Button variant="outline" size="sm" onClick={() => window.print()}>
-            Print
-          </Button>
-          <Link href={`/dashboard/invoice/${invoice.id}/edit`}>
-            <Button variant="outline" size="sm">
-              Edit
-            </Button>
-          </Link>
+          <a
+            href={`/dashboard/invoice/${invoice.id}/edit`}
+            className="inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            Edit
+          </a>
           <Button variant="primary" size="sm">
             Mark as Paid
           </Button>
@@ -110,36 +120,42 @@ export default function ViewInvoicePage() {
       </div>
 
       {/* Invoice Details */}
-      <div className="p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-          <div>
-            <h3 className="text-sm font-medium text-gray-500 mb-2">Bill To</h3>
-            <p className="font-medium">{invoice.customer}</p>
-            <p className="text-sm text-gray-600">123 Business St.</p>
-            <p className="text-sm text-gray-600">San Francisco, CA 94103</p>
-            <p className="text-sm text-gray-600">contact@acme.com</p>
-          </div>
-          <div className="md:text-right">
-            <div className="grid grid-cols-2 gap-x-4">
-              <div className="text-sm text-gray-500">Invoice #</div>
-              <div className="text-sm font-medium">{invoice.id}</div>
-
-              <div className="text-sm text-gray-500">Date</div>
-              <div className="text-sm">{new Date(invoice.date).toLocaleDateString()}</div>
-
-              <div className="text-sm text-gray-500">Due Date</div>
-              <div className="text-sm">{new Date(invoice.dueDate).toLocaleDateString()}</div>
-
-              <div className="text-sm text-gray-500">Amount Due</div>
-              <div className="text-lg font-bold">${invoice.amount.toLocaleString()}</div>
+      {/* Customer and Invoice Info */}
+      <div className="px-6 py-4 grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">Bill To</h3>
+          <p className="text-sm text-gray-900 font-medium">{invoice.customer}</p>
+          {invoice.customerEmail && (
+            <p className="text-sm text-gray-600">{invoice.customerEmail}</p>
+          )}
+          {invoice.customerAddress && (
+            <div className="whitespace-pre-line text-sm text-gray-600 mt-1">
+              {invoice.customerAddress}
             </div>
+          )}
+        </div>
+        <div className="md:text-right">
+          <div className="grid grid-cols-2 gap-x-4">
+            <div className="text-sm text-gray-500">Invoice #</div>
+            <div className="text-sm font-medium">{invoice.id}</div>
+
+            <div className="text-sm text-gray-500">Date</div>
+            <div className="text-sm">{invoice.date ? new Date(invoice.date).toLocaleDateString() : 'N/A'}</div>
+
+            <div className="text-sm text-gray-500">Due Date</div>
+            <div className="text-sm">{invoice.dueDate ? new Date(invoice.dueDate).toLocaleDateString() : 'N/A'}</div>
+
+            <div className="text-sm text-gray-500">Amount Due</div>
+            <div className="text-lg font-bold">${invoice.amount?.toLocaleString(undefined, { minimumFractionDigits: 2 }) || '0.00'}</div>
           </div>
         </div>
+      </div>
 
-        {/* Items Table */}
+      {/* Items */}
+      <div className="px-6 py-4">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
-            <thead>
+            <thead className="bg-gray-50">
               <tr>
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Item
@@ -148,60 +164,76 @@ export default function ViewInvoicePage() {
                   Qty
                 </th>
                 <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Rate
+                  Price
                 </th>
                 <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Amount
+                  Total
                 </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {invoice.items.map((item, index) => (
+              {invoice.items?.map((item, index) => (
                 <tr key={index}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {item.description}
+                    {item.description || 'No description'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">
                     {item.quantity}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">
-                    ${item.unitPrice.toLocaleString()}
+                    ${item.unitPrice?.toLocaleString(undefined, { minimumFractionDigits: 2 }) || '0.00'}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right font-medium">
-                    ${item.total.toLocaleString()}
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">
+                    ${(item.quantity * (item.unitPrice || 0)).toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </td>
                 </tr>
-              ))}
+              )) || (
+                <tr>
+                  <td colSpan={4} className="px-6 py-4 text-center text-sm text-gray-500">
+                    No items found
+                  </td>
+                </tr>
+              )}
             </tbody>
+            <tfoot>
+              <tr>
+                <td colSpan={3} className="text-right px-6 py-4 text-sm font-medium text-gray-900">
+                  Subtotal
+                </td>
+                <td className="px-6 py-4 text-right text-sm font-medium text-gray-900">
+                  ${invoice.amount?.toLocaleString(undefined, { minimumFractionDigits: 2 }) || '0.00'}
+                </td>
+              </tr>
+              <tr>
+                <td colSpan={3} className="text-right px-6 py-4 text-sm font-medium text-gray-900">
+                  Tax (0%)
+                </td>
+                <td className="px-6 py-4 text-right text-sm font-medium text-gray-900">
+                  $0.00
+                </td>
+              </tr>
+              <tr>
+                <td colSpan={3} className="text-right px-6 py-4 text-lg font-bold text-gray-900 border-t border-gray-200">
+                  Total
+                </td>
+                <td className="px-6 py-4 text-right text-lg font-bold text-gray-900 border-t border-gray-200">
+                  ${invoice.amount?.toLocaleString(undefined, { minimumFractionDigits: 2 }) || '0.00'}
+                </td>
+              </tr>
+            </tfoot>
           </table>
         </div>
+      </div>
 
-        {/* Totals */}
-        <div className="mt-8 flex justify-end">
-          <div className="w-64">
-            <div className="flex justify-between py-2 text-sm text-gray-600">
-              <span>Subtotal</span>
-              <span>${invoice.amount.toLocaleString()}</span>
-            </div>
-            <div className="flex justify-between py-2 text-sm text-gray-600">
-              <span>Tax (0%)</span>
-              <span>$0.00</span>
-            </div>
-            <div className="flex justify-between py-2 text-lg font-bold border-t border-gray-200 mt-2 pt-3">
-              <span>Total</span>
-              <span>${invoice.amount.toLocaleString()}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Notes */}
-        <div className="mt-12 pt-6 border-t border-gray-200">
+      {/* Notes */}
+      {invoice.notes && (
+        <div className="px-6 py-4 bg-gray-50">
           <h3 className="text-sm font-medium text-gray-500">Notes</h3>
-          <p className="mt-1 text-sm text-gray-500">
-            Thank you for your business. Please make the payment by the due date.
+          <p className="mt-1 text-sm text-gray-600 whitespace-pre-line">
+            {invoice.notes}
           </p>
         </div>
-      </div>
+      )}
     </div>
   );
 }

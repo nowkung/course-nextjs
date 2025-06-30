@@ -2,17 +2,21 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import {Hi} from './Hi';
+import { Heroes } from './Heroes';
 
 
 function App() {
   return (
     <>
       <div className="App">
-        <Hi name="One" age={10} duration={1000} />
+        <Heroes />
+
+
+        {/* <Hi name="One" age={10} duration={1000} />
 
         <Hi name="Two" age={20} />
 
-        <Hi name="Three" age={30} />
+        <Hi name="Three" age={30} /> */}
 
         {/* <label>Name:</label>
         <h1>Hello World</h1>

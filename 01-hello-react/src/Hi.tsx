@@ -20,6 +20,7 @@ type Props = {
 
 type State = {
   count: number;
+  age: number; // Optional state property
 };
 
 export class Hi extends React.Component<Props, State> {
@@ -27,6 +28,7 @@ export class Hi extends React.Component<Props, State> {
         super(props);
         this.state = {
             count: 0,
+            age: props.age // Initialize state with props
         };
     }
 
@@ -41,6 +43,10 @@ export class Hi extends React.Component<Props, State> {
       <>
         <label>Name:</label>
         <h1>Hello {name}</h1>
+        {/* if age more than 20 it will show Hangman word */}
+        {age > 20 && <h1>Hangman</h1>}
+
+
 
         <label>Age:</label>
         <h1>{age}</h1>
@@ -51,6 +57,8 @@ export class Hi extends React.Component<Props, State> {
         <h1>{this.state.count}</h1>
 
         <button onClick={this.increaseCount}>Increase Count</button>
+        {/* increase Age --- count from the props age. */}
+        <button onClick={() => this.setState({ age: this.state.age + 1 })}>Increase Age</button>
       </>
     );
   }

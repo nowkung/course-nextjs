@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { getInvoice } from '@/services/invoiceService';
 import { Invoice } from '@/types/invoice';
-import InvoiceLoading from '../components/InvoiceLoading';
-import InvoiceError from '../components/InvoiceError';
-import InvoiceDetail from '../components/InvoiceDetail';
+import InvoiceLoading from '@/components/invoice/InvoiceLoading';
+import InvoiceError from '@/components/invoice/InvoiceError';
+import InvoiceDetail from '@/components/invoice/InvoiceDetail';
 
 export default function InvoiceDetailPage() {
   const { id } = useParams();
@@ -55,7 +55,7 @@ export default function InvoiceDetailPage() {
 
   if (error) {
     return (
-      <InvoiceError 
+      <InvoiceError
         message={error}
         onRetry={fetchInvoice}
       />
@@ -78,7 +78,7 @@ export default function InvoiceDetailPage() {
   }
 
   return (
-    <InvoiceDetail 
+    <InvoiceDetail
       invoice={invoice}
       onMarkAsPaid={handleMarkAsPaid}
       onEdit={handleEdit}

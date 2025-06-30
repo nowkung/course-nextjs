@@ -2,16 +2,22 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-// here
 
-const Hi = (props: any) => {
+
+type Props = {
+  name: string;
+  age: number;
+  duration?: number; // Optional prop
+}
+
+const Hi = ({ name, age, duration }: Props) => {
   return (
     <>
       <label>Name:</label>
-      <h1>Hello {props.name}</h1>
+      <h1>Hello {name}</h1>
 
       <label>Age:</label>
-      <h1>{props.age}</h1>
+      <h1>{age}</h1>
     </>
   );
 }
@@ -20,7 +26,7 @@ function App() {
   return (
     <>
       <div className="App">
-        <Hi name="One" age={10} />
+        <Hi name="One" age={10} duration={1000} />
 
         <Hi name="Two" age={20} />
 

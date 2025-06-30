@@ -1,0 +1,144 @@
+{
+  "imposters": [
+    {
+      "port": 2727,
+      "protocol": "http",
+
+      "name": "heroes",
+      "stubs": [
+        {
+          "predicates": [
+            {
+              "deepEquals": {
+                "method": "GET",
+                "path": "/heroes/Thor"
+              }
+            }
+          ],
+          "responses": [
+            {
+              "is": {
+                "statusCode": 200,
+                "headers": {
+                  "Content-Type": "application/json",
+                  "Access-Control-Allow-Origin": "*"
+                },
+                "body": {
+                  "name": "Thor",
+                  "power": 5000,
+                  "powerName": "Lightning"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "predicates": [
+            {
+              "deepEquals": {
+                "method": "GET",
+                "path": "/heroes/IronMan"
+              }
+            }
+          ],
+          "responses": [
+            {
+              "is": {
+                "statusCode": 200,
+                "headers": {
+                  "Content-Type": "application/json",
+                  "Access-Control-Allow-Origin": "*"
+                },
+                "body": {
+                  "name": "IronMan",
+                  "power": 300,
+                  "powerName": "Arc reactor"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "predicates": [
+            {
+              "deepEquals": {
+                "method": "GET",
+                "path": "/heroes/DoctorStrange"
+              }
+            }
+          ],
+          "responses": [
+            {
+              "is": {
+                "statusCode": 200,
+                "headers": {
+                  "Content-Type": "application/json",
+                  "Access-Control-Allow-Origin": "*"
+                },
+                "body": {
+                  "name": "DoctorStrange",
+                  "power": 4500,
+                  "powerName": "Magic"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "predicates": [
+            {
+              "deepEquals": {
+                "method": "GET",
+                "path": "/heroes"
+              }
+            }
+          ],
+          "responses": [
+            {
+              "is": {
+                "statusCode": 200,
+                "headers": {
+                  "Content-Type": "application/json",
+                  "Access-Control-Allow-Origin": "*"
+                },
+                "body": [
+                  {
+                    "name": "Thor",
+                    "power": 5000,
+                    "powerName": "Lightning"
+                  },
+                  {
+                    "name": "IronMan",
+                    "power": 300,
+                    "powerName": "Arc reactor"
+                  },
+                  {
+                    "name": "DoctorStrange",
+                    "power": 4500,
+                    "powerName": "Magic"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "responses": [
+            {
+              "is": {
+                "statusCode": 404,
+                "headers": {
+                  "Content-Type": "application/json",
+                  "Access-Control-Allow-Origin": "*"
+                },
+                "body": {
+                  "error": "not found"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -18,7 +18,22 @@ type Props = {
 //   );
 // }
 
-export class Hi extends React.Component<Props> {
+type State = {
+  count: number;
+};
+
+export class Hi extends React.Component<Props, State> {
+    constructor(props: Props) {
+        super(props);
+        this.state = {
+            count: 0,
+        };
+    }
+
+  increaseCount = () => {
+    this.setState((prevState) => ({ count: prevState.count + 1 }));
+  };
+
   render() {
     const { name, age, duration } = this.props;
 
@@ -31,6 +46,11 @@ export class Hi extends React.Component<Props> {
         <h1>{age}</h1>
 
         {duration && <p>Duration: {duration} ms</p>}
+
+        <label>Count:</label>
+        <h1>{this.state.count}</h1>
+
+        <button onClick={this.increaseCount}>Increase Count</button>
       </>
     );
   }

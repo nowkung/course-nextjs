@@ -14,6 +14,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           <NavLink href="/dashboard">Overview</NavLink>
           <NavLink href="/dashboard/invoice">Invoice</NavLink>
           <NavLink href="/dashboard/customer">Customer</NavLink>
+          <div className="pt-4 mt-4 border-t border-gray-700">
+            <NavLink href="/demo">Component Demo</NavLink>
+          </div>
         </nav>
       </div>
 

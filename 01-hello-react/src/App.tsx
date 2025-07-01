@@ -1,16 +1,11 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import {Hi} from './Hi';
-import { Heroes } from './Heroes';
-
+import "./App.css";
+import { HeroFunc } from "./Heroes";
 
 function App() {
   return (
     <>
       <div className="App">
-        <Heroes />
-
+        <HeroFunc />
 
         {/* <Hi name="One" age={10} duration={1000} />
 

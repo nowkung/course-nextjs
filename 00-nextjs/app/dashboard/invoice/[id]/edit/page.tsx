@@ -106,14 +106,14 @@ export default function EditInvoicePage() {
 
   return (
     <div className="bg-white rounded-lg shadow p-6">
-      <h1 className="text-2xl font-bold mb-6">
+      <h1 className="text-2xl font-bold mb-6 text-gray-900">
         {id === 'new' ? 'Create New Invoice' : `Edit Invoice #${id}`}
       </h1>
       
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Customer Name</label>
+            <label className="block text-sm font-medium text-gray-800 mb-1">Customer Name</label>
             <input
               type="text"
               name="customer"
@@ -125,7 +125,7 @@ export default function EditInvoicePage() {
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+            <label className="block text-sm font-medium text-gray-800 mb-1">Status</label>
             <select
               name="status"
               value={invoice.status}
@@ -142,7 +142,7 @@ export default function EditInvoicePage() {
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Invoice Date</label>
+            <label className="block text-sm font-medium text-gray-800 mb-1">Invoice Date</label>
             <input
               type="date"
               name="date"
@@ -154,7 +154,7 @@ export default function EditInvoicePage() {
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Due Date</label>
+            <label className="block text-sm font-medium text-gray-800 mb-1">Due Date</label>
             <input
               type="date"
               name="dueDate"
@@ -166,7 +166,7 @@ export default function EditInvoicePage() {
           </div>
           
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Customer Email</label>
+            <label className="block text-sm font-medium text-gray-800 mb-1">Customer Email</label>
             <input
               type="email"
               name="customerEmail"
@@ -177,7 +177,7 @@ export default function EditInvoicePage() {
           </div>
           
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Customer Address</label>
+            <label className="block text-sm font-medium text-gray-800 mb-1">Customer Address</label>
             <textarea
               name="customerAddress"
               value={invoice.customerAddress}
@@ -190,7 +190,7 @@ export default function EditInvoicePage() {
         
         <div className="border-t border-gray-200 pt-6">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-medium">Items</h2>
+            <h2 className="text-lg font-medium text-gray-900">Items</h2>
             <Button
               type="button"
               variant="outline"
@@ -276,7 +276,7 @@ export default function EditInvoicePage() {
         </div>
         
         <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+          <label className="block text-sm font-medium text-gray-800 mb-1">Notes</label>
           <textarea
             name="notes"
             value={invoice.notes}

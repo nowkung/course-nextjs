@@ -21,11 +21,11 @@ export default function NewInvoicePage() {
 
   return (
     <div className="bg-white rounded-lg shadow p-6 max-w-2xl mx-auto">
-      <h2 className="text-xl font-semibold mb-6">Create New Invoice</h2>
+      <h2 className="text-xl font-semibold mb-6 text-gray-900">Create New Invoice</h2>
       
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label htmlFor="customer" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="customer" className="block text-sm text-gray-700 mb-1">
             Customer Name
           </label>
           <input
@@ -39,7 +39,7 @@ export default function NewInvoicePage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label htmlFor="amount" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="amount" className="block text-sm text-gray-700 mb-1">
               Amount
             </label>
             <div className="relative rounded-md shadow-sm">
@@ -59,7 +59,7 @@ export default function NewInvoicePage() {
           </div>
 
           <div>
-            <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="status" className="block text-sm text-gray-700 mb-1">
               Status
             </label>
             <select

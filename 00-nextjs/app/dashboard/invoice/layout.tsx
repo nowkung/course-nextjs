@@ -22,25 +22,25 @@ export default function InvoiceLayout({ children }: InvoiceLayoutProps) {
         {/* Sidebar */}
         <aside className="w-64 space-y-4">
           <div className="p-4 bg-white rounded-lg shadow">
-            <h2 className="font-semibold mb-3">Filter</h2>
+            <h2 className="font-semibold mb-3 text-gray-800">Filter</h2>
             <div className="space-y-2">
               <div className="flex items-center">
                 <input type="checkbox" id="pending" className="rounded text-blue-600" />
-                <label htmlFor="pending" className="ml-2 text-sm">Pending</label>
+                <label htmlFor="pending" className="ml-2 text-sm text-gray-800">Pending</label>
               </div>
               <div className="flex items-center">
                 <input type="checkbox" id="paid" className="rounded text-blue-600" />
-                <label htmlFor="paid" className="ml-2 text-sm">Paid</label>
+                <label htmlFor="paid" className="ml-2 text-sm text-gray-800">Paid</label>
               </div>
               <div className="flex items-center">
                 <input type="checkbox" id="overdue" className="rounded text-blue-600" />
-                <label htmlFor="overdue" className="ml-2 text-sm">Overdue</label>
+                <label htmlFor="overdue" className="ml-2 text-sm text-gray-800">Overdue</label>
               </div>
             </div>
           </div>
 
           <div className="p-4 bg-white rounded-lg shadow">
-            <h2 className="font-semibold mb-3">Quick Actions</h2>
+            <h2 className="font-semibold mb-3 text-gray-800">Quick Actions</h2>
             <ul className="space-y-2">
               <li>
                 <Link href="/dashboard/invoice/export" className="text-blue-600 hover:underline text-sm">
